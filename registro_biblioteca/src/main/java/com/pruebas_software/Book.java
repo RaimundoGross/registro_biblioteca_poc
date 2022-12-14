@@ -7,7 +7,7 @@ public class Book {
 
     private String title;
     private ArrayList<String> authors;
-    private Date editionDate;
+    private String editionDate;
     private int pages;
     private String publisher;
     private String genre;
@@ -18,8 +18,9 @@ public class Book {
 
     // Builder
 
-    public Book(String title, String author, Date editionDate, int pages, String publisher, String genre, String isbn, Location location, State state, String description){
+    public Book(String title, String author, String editionDate, int pages, String publisher, String genre, String isbn, Location location, State state, String description){
         this.title = title;
+        this.authors = new ArrayList<String>();
         this.authors.add(author);
         this.editionDate = editionDate;
         this.pages = pages;
@@ -31,7 +32,7 @@ public class Book {
         this.description = description;
     }
 
-    public Book(String title, ArrayList<String> authors, Date editionDate, int pages, String publisher, String genre, String isbn, Location location, State state, String description){
+    public Book(String title, ArrayList<String> authors, String editionDate, int pages, String publisher, String genre, String isbn, Location location, State state, String description){
         this.title = title;
         this.authors = authors;
         this.editionDate = editionDate;
@@ -50,7 +51,7 @@ public class Book {
 
     public ArrayList<String> getAuthors(){ return this.authors; }
 
-    public Date getEditionDate(){ return this.editionDate; }
+    public String getEditionDate(){ return this.editionDate; }
 
     public int getPages(){ return this.pages; }
 
@@ -72,7 +73,7 @@ public class Book {
 
     public void setAuthors(ArrayList<String> authors) { this.authors = authors; }
 
-    public void setEditionDate(Date editionDate) { this.editionDate = editionDate; }
+    public void setEditionDate(String editionDate) { this.editionDate = editionDate; }
 
     public void setPages(int pages) { this.pages = pages; }
 
@@ -94,6 +95,19 @@ public class Book {
 
     public void addAuthors(ArrayList<String> authors){ this.authors.addAll(authors); }
 
+    public void displayLess(){
+        String authorsDisplay;
+
+        if (this.authors.size() == 1) authorsDisplay = this.authors.get(0);
+        else {
+            authorsDisplay = this.authors.get(0) + ", " + this.authors.get(0);
+            if (this.authors.size() > 2) authorsDisplay += " y otros";
+        }
+
+        String bookString = String.format("Title: %s\nAuthor(s): %s\nISBN: %s", this.title, authorsDisplay, this.isbn );
+        System.out.println(bookString);
+    }
+
     public void displayLess(int index){
         String authorsDisplay;
 
@@ -103,7 +117,7 @@ public class Book {
             if (this.authors.size() > 2) authorsDisplay += " y otros";
         }
 
-        String bookString = String.format("%s.- Title: %s\nAuthor(s): %s\nISBN: %s", this.title, authorsDisplay, this.isbn );
+        String bookString = String.format("%s.- Title: %s\nAuthor(s): %s\nISBN: %s", index, this.title, authorsDisplay, this.isbn );
         System.out.println(bookString);
     }
 }
