@@ -2,8 +2,6 @@ package com.pruebas_software;
 
 import java.util.ArrayList;
 import java.util.Date;
-import com.pruebas_software.Location;
-import com.pruebas_software.State;
 
 public class Book {
 
@@ -95,4 +93,17 @@ public class Book {
     public void addAuthor(String author){ this.authors.add(author); }
 
     public void addAuthors(ArrayList<String> authors){ this.authors.addAll(authors); }
+
+    public void displayLess(int index){
+        String authorsDisplay;
+
+        if (this.authors.size() == 1) authorsDisplay = this.authors.get(0);
+        else {
+            authorsDisplay = this.authors.get(0) + ", " + this.authors.get(0);
+            if (this.authors.size() > 2) authorsDisplay += " y otros";
+        }
+
+        String bookString = String.format("%s.- Title: %s\nAuthor(s): %s\nISBN: %s", this.title, authorsDisplay, this.isbn );
+        System.out.println(bookString);
+    }
 }
