@@ -1,6 +1,7 @@
 package com.pruebas_software;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Library {
 
@@ -35,16 +36,24 @@ public class Library {
             // System.out.println(op);
             if (op == 1){
                 // ver listado
-                displayBooks();
+                System.out.println("Listado de libros:\n");
+                displayBooks(this.bookList, "No hay libros en la biblioteca aun.");
+                System.out.println( "---------------------------------------------------------------------------------" );
             } else if (op == 2){
                 // buscar libro
                 System.out.println("buscar libro");
+                searchBook();
+                System.out.println( "---------------------------------------------------------------------------------" );
             } else if (op == 3){
                 // registrar libro
                 System.out.println("registrar libro");
+                registerBook();
+                System.out.println( "---------------------------------------------------------------------------------" );
             } else if (op == 4){
                 // cambiar estado
                 System.out.println("cambiar estado");
+                changeState();
+                System.out.println( "---------------------------------------------------------------------------------" );
             } else if (op == 5){
                 // editar libro
                 System.out.println("editar libro");
@@ -81,18 +90,140 @@ public class Library {
         return o;
     }
 
-    void displayBooks(){
-        System.out.println("Listado de libros:\n");
-        int size = this.bookList.size();
+    void displayBooks(ArrayList<Book> displayBookList, String emptyListMsg){
+        
+        int size = displayBookList.size();
         if (size == 0){
-            System.out.println("No hay libros en la biblioteca aun");
+            System.out.println(emptyListMsg);
         } else {
             Book b;
             for (int i = 0; i < size; i++) {
-                b = this.bookList.get(i);
-                b.displayLess(i);
+                b = displayBookList.get(i);
+                b.displayLess(i+1);
             }
         }
     }
+
+    void registerBook(){
+        System.out.println("Registro de libros:\n");
+        System.out.println("Ingrese titulo: ");
+        String title = System.console().readLine();
+        System.out.println("Ingrese autor. En el caso que sean mas de uno separar por comas: ");
+        String authors = System.console().readLine();
+        System.out.println("Ingrese fecha edicion en formato DD/MM/YYYY: ");
+        String dateStr = System.console().readLine();
+    
+        System.out.println("Ingrese numero de paginas: ");
+        String pagesStr = System.console().readLine();
+        int pages = Integer.parseInt(pagesStr);
+        System.out.println("Ingrese editorial: ");
+        String publisher = System.console().readLine();
+        System.out.println("Ingrese genero: ");
+        String genre = System.console().readLine();
+        System.out.println("Ingrese isbn: ");
+        String isbn = System.console().readLine();
+        
+        // location
+        System.out.println("Ingrese numero de piso: ");
+        String floorStr = System.console().readLine();
+        int floor = Integer.parseInt(floorStr);
+        System.out.println("Ingrese numero de pasillo: ");
+        String hallwayStr = System.console().readLine();
+        int hallway = Integer.parseInt(hallwayStr);
+        System.out.println("Ingrese numero de estante: ");
+        String shelfStr = System.console().readLine();
+        int shelf = Integer.parseInt(shelfStr);
+        System.out.println("Ingrese posicion x: ");
+        String xPosStr = System.console().readLine();
+        int xPos = Integer.parseInt(xPosStr);
+        System.out.println("Ingrese posicion y: ");
+        String yPosStr = System.console().readLine();
+        int yPos = Integer.parseInt(yPosStr);
+
+        Location location = new Location(floor, hallway, shelf, xPos, yPos);
+
+        // state
+        System.out.println("Seleccione estado:\n1.-Disponible\n2.-Prestado\n3.-Perdido");    
+        String stateStr = System.console().readLine();
+        int stateOp = Integer.parseInt(stateStr);
+        State state;
+        if (stateOp == 1) state = State.AVAIBLE;
+        else if (stateOp == 2) state = State.BORROWED;
+        else state = State.MISSING;
+
+        System.out.println("Ingrese descripcion: ");
+        String description = System.console().readLine();
+
+        Book b = new Book(title, authors, dateStr, pages, publisher, genre, isbn, location, state, description);
+        this.bookList.add(b);
+        System.out.println("Libro registrado correctamente");
+        b.displayLess();
+    }   
+
+    ArrayList<Book> bookFilter(int filterType, String filter){
+        ArrayList<Book> filteredBookList = new ArrayList<Book>();
+        if (filterType == 1){
+            System.out.println("filtro: " + filter);
+            for (Book book : this.bookList) {  
+                if (book.getTitle().contains(filter)) filteredBookList.add(book); 
+            }
+        } else if (filterType == 3){
+            for (Book book : this.bookList) {
+                if (book.getISBN().contains(filter)) filteredBookList.add(book); 
+            }
+        } else {
+            for (Book book : this.bookList) {
+                for (String author : book.getAuthors()) {
+                    if (author.contains(filter)) filteredBookList.add(book);
+                }
+            }
+        }
+        return filteredBookList;
+    }
+
+    void searchBook(){
+        System.out.println("Buscar libro:\n");
+        boolean flag = true;
+        while (flag){
+            System.out.println("Seleccione el tipo de busqueda:\n1.- Por titulo\n2.- Por autor\n3.- Por isbn\n4.- Salir");
+            int op = opFilter(1, 4);
+
+            if (op == 1) System.out.println("\nIngrese titulo:");
+            else if (op == 2) System.out.println("\nIngrese autor:");
+            else if (op == 3) System.out.println("\nIngrese isbn:");
+            else flag = false;
+
+            if (flag){
+                String filter = System.console().readLine();
+
+                ArrayList<Book> results = bookFilter(op, filter);
+
+                System.out.println("Resultados: ");
+                displayBooks(results, "No hay libros que coincidan con su busqueda");
+            }
+        }
+    }
+
+    void changeState(){
+        System.out.println("Cambio de Estado\n");
+
+        System.out.println("Ingrese el indice del libro al que quiera cambiar el estado (si no recuerda los indices puede ingresar 0 para ver la lista completa de libros): ");
+        int op = opFilter(0, this.bookList.size());
+
+        System.out.println("Se ha seleccionado el siguiente libro:");
+        Book b = this.bookList.get(op-1);
+        b.displayLess();
+        System.out.println("Su estado actual es: " + b.getState().toString());
+        System.out.println("Seleccione nuevo estado:\n1.-Disponible\n2.-Prestado\n3.-Perdido\n4.- Cancelar");    
+        String stateStr = System.console().readLine();
+        int stateOp = Integer.parseInt(stateStr);
+        String msg = "Operacion realizada con exito";
+        if (stateOp == 1) b.setState( State.AVAIBLE );
+        else if (stateOp == 2) b.setState( State.BORROWED );
+        else if (stateOp == 3) b.setState( State.MISSING );
+        else msg = "Operacion cancelada";
+        System.out.println(msg);
+    }
+
 
 }
