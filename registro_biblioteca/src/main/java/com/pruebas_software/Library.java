@@ -60,6 +60,8 @@ public class Library {
             } else if (op == 6){
                 // eliminar libro
                 System.out.println("eliminar libro");
+                deleteBook();
+                System.out.println( "---------------------------------------------------------------------------------" );
             } else {
                 flag = false;
                 System.out.println("Hasta la proxima!");
@@ -206,24 +208,68 @@ public class Library {
 
     void changeState(){
         System.out.println("Cambio de Estado\n");
-
-        System.out.println("Ingrese el indice del libro al que quiera cambiar el estado (si no recuerda los indices puede ingresar 0 para ver la lista completa de libros): ");
-        int op = opFilter(0, this.bookList.size());
-
-        System.out.println("Se ha seleccionado el siguiente libro:");
-        Book b = this.bookList.get(op-1);
-        b.displayLess();
-        System.out.println("Su estado actual es: " + b.getState().toString());
-        System.out.println("Seleccione nuevo estado:\n1.-Disponible\n2.-Prestado\n3.-Perdido\n4.- Cancelar");    
-        String stateStr = System.console().readLine();
-        int stateOp = Integer.parseInt(stateStr);
-        String msg = "Operacion realizada con exito";
-        if (stateOp == 1) b.setState( State.AVAIBLE );
-        else if (stateOp == 2) b.setState( State.BORROWED );
-        else if (stateOp == 3) b.setState( State.MISSING );
-        else msg = "Operacion cancelada";
-        System.out.println(msg);
+        int size = this.bookList.size();
+        if (size == 0) {
+            System.out.println("No hay libros en la biblioteca aun.\n");
+        } else {
+            
+            System.out.println("Ingrese el indice del libro al que quiera cambiar el estado (si no recuerda los indices puede ingresar 0 para ver la lista completa de libros): ");
+            int op = opFilter(0, this.bookList.size());
+            if (op == 0) {
+                displayBooks(this.bookList, "No hay libros en la biblioteca aun.\n");
+                System.out.println("Ingrese el indice del libro al que quiera cambiar el estado: ");
+                op = opFilter(1, this.bookList.size());
+            }
+            System.out.println("Se ha seleccionado el siguiente libro:");
+            Book b = this.bookList.get(op-1);
+            b.displayLess();
+            System.out.println("Su estado actual es: " + b.getState().toString());
+            System.out.println("Seleccione nuevo estado:\n1.-Disponible\n2.-Prestado\n3.-Perdido\n4.- Cancelar");    
+            String stateStr = System.console().readLine();
+            int stateOp = Integer.parseInt(stateStr);
+            String msg = "Se ha actualizado el estado del libro";
+            if (stateOp == 1) b.setState( State.AVAIBLE );
+            else if (stateOp == 2) b.setState( State.BORROWED );
+            else if (stateOp == 3) b.setState( State.MISSING );
+            else msg = "Operacion cancelada";
+            System.out.println(msg);
+        }
+        
     }
 
+    void editBook(){}
+
+    void deleteBook(){
+        System.out.println("Cambio de Estado\n");
+
+        int size = this.bookList.size();
+        if (size == 0) {
+            System.out.println("No hay libros en la biblioteca aun.\n");
+        } else {
+            System.out.println("Ingrese el indice del libro al que quiera cambiar el estado (si no recuerda los indices puede ingresar 0 para ver la lista completa de libros): ");
+            int op = opFilter(0, this.bookList.size());
+            if (op == 0) {
+                displayBooks(this.bookList, "No hay libros en la biblioteca aun.\n");
+                System.out.println("Ingrese el indice del libro al que quiera cambiar el estado: ");
+                op = opFilter(1, this.bookList.size());
+            }
+            System.out.println("Se ha seleccionado el siguiente libro:");
+            Book b = this.bookList.get(op-1);
+            b.displayLess();
+            boolean flag = true;
+            String response = "";
+            while(flag){
+                System.out.println("¿Esta seguro de querer eliminar el libro? [y/n]");
+                response = System.console().readLine();
+                if (response != "y" && response != "Y" && response != "n" && response != "N") System.out.println("La opcion ingresada no es valida. Intentelo nuevamente");
+                else flag = false;
+            }
+
+            if (response == "y" || response == "Y") {
+                this.bookList.remove(op);
+                System.out.println("El libro ha sido removido con exito");
+            }
+        }
+    }
 
 }
