@@ -1,7 +1,6 @@
 package com.pruebas_software;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Book {
 
@@ -100,11 +99,11 @@ public class Book {
 
         if (this.authors.size() == 1) authorsDisplay = this.authors.get(0);
         else {
-            authorsDisplay = this.authors.get(0) + ", " + this.authors.get(0);
+            authorsDisplay = this.authors.get(0) + ", " + this.authors.get(1);
             if (this.authors.size() > 2) authorsDisplay += " y otros";
         }
 
-        String bookString = String.format("Title: %s\nAuthor(s): %s\nISBN: %s", this.title, authorsDisplay, this.isbn );
+        String bookString = String.format("Titulo: %s\nAutor(es): %s\nISBN: %s", this.title, authorsDisplay, this.isbn );
         System.out.println(bookString);
     }
 
@@ -113,11 +112,11 @@ public class Book {
 
         if (this.authors.size() == 1) authorsDisplay = this.authors.get(0);
         else {
-            authorsDisplay = this.authors.get(0) + ", " + this.authors.get(0);
+            authorsDisplay = this.authors.get(0) + ", " + this.authors.get(1);
             if (this.authors.size() > 2) authorsDisplay += " y otros";
         }
 
-        String bookString = String.format("%s.- Title: %s\nAuthor(s): %s\nISBN: %s", index, this.title, authorsDisplay, this.isbn );
+        String bookString = String.format("%s.- Titulo: %s\nAutor(es): %s\nISBN: %s", index, this.title, authorsDisplay, this.isbn );
         System.out.println(bookString);
     }
 }
